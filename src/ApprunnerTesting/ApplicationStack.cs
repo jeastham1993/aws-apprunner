@@ -48,7 +48,7 @@ public class ApplicationStack : Construct
                 {
                     Port = 8080
                 },
-                TagOrDigest = "0.0.1",
+                TagOrDigest = "0.0.3",
             }),
             AutoDeploymentsEnabled = false,
             InstanceRole = applicationRole,
