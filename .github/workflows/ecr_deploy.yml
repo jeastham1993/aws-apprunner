@@ -34,7 +34,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: apprunner-ecr-repo
-        IMAGE_TAG: 0.0.4
+        IMAGE_TAG: $GITHUB_SHA
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG src/AppRuner.Api/
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
