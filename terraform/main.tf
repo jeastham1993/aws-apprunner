@@ -83,7 +83,7 @@ resource "aws_security_group" "app_sg" {
 resource "aws_apprunner_vpc_connector" "connector" {
   vpc_connector_name = "vpc-connector"
   subnets            = module.vpc.public_subnets
-  security_groups    = [aws_security_group.app_sg.id]
+  security_groups    = [aws_security_group]
 }
 
 resource "aws_apprunner_service" "dotnet_apprunner" {
