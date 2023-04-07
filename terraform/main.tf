@@ -63,11 +63,11 @@ resource "aws_iam_role_policy" "test_policy" {
 
 resource "aws_security_group" "app_sg" {
   name_prefix = "application_sg"
-
+    vpc_id = module.vpc.vpc_id
   ingress {
     from_port   = 0
     to_port     = 0
-    protocol    = "tcp"
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -83,7 +83,7 @@ resource "aws_security_group" "app_sg" {
 resource "aws_apprunner_vpc_connector" "connector" {
   vpc_connector_name = "vpc-connector"
   subnets            = module.vpc.public_subnets
-  security_groups    = [aws_security_group]
+  security_groups    = [aws_security_group.app_sg.id]
 }
 
 resource "aws_apprunner_service" "dotnet_apprunner" {
@@ -103,18 +103,24 @@ resource "aws_apprunner_service" "dotnet_apprunner" {
     }
   }
   health_check_configuration {
-    healthy_threshold = 3
-    interval = 5
-    path = "/health"
-    protocol = "HTTP"
-    timeout = 5
+    healthy_threshold   = 3
+    interval            = 5
+    path                = "/health"
+    protocol            = "HTTP"
+    timeout             = 5
     unhealthy_threshold = 3
+  }
+  network_configuration {
+    egress_configuration {
+      egress_type       = "VPC"
+      vpc_connector_arn = aws_apprunner_vpc_connector.connector.arn
+    }
   }
   tags = {
     Name = "dotnet-sample-service"
   }
   instance_configuration {
-    cpu = "512"
+    cpu = "1024"
   }
 }
 
