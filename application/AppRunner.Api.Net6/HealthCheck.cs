@@ -1,6 +1,6 @@
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+namespace AppRuner.Api.NET6;
 
-namespace AppRuner.Api;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 public class HealthCheck : IHealthCheck
 {

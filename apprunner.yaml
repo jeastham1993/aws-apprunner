@@ -3,10 +3,10 @@ runtime: dotnet6
 build:
   commands:
     build:
-      - dotnet publish ./application/AppRunner.Api.Net6/AppRuner.Api.csproj -c Release -o out
+      - dotnet publish ./application/AppRunner.Api.Net6/AppRuner.Api.NET6.csproj -c Release -o out
 run:
   runtime-version: 6.0.9
-  command: dotnet out/AppRuner.Api.dll
+  command: dotnet out/AppRuner.Api.NET6.dll
   network:
     port: 5000
     env: APP_PORT

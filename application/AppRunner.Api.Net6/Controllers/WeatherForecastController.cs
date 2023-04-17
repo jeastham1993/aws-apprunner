@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
+namespace AppRuner.Api.NET6.Controllers;
 
-namespace AppRuner.Api.Controllers;
+using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("[controller]")]
@@ -15,7 +15,7 @@ public class WeatherForecastController : ControllerBase
 
     public WeatherForecastController(ILogger<WeatherForecastController> logger)
     {
-        _logger = logger;
+        this._logger = logger;
     }
 
     [HttpGet(Name = "GetWeatherForecast")]
@@ -23,7 +23,7 @@ public class WeatherForecastController : ControllerBase
     {
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+            Date = DateTime.Now.AddDays(index),
             TemperatureC = Random.Shared.Next(-20, 55),
             Summary = Summaries[Random.Shared.Next(Summaries.Length)],
             Test = Guid.NewGuid().ToString()
