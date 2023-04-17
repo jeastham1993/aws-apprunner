@@ -1,26 +1,3 @@
-module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
-
-  name = "main"
-  cidr = "10.0.0.0/16"
-
-  azs             = ["eu-west-1a"]
-  private_subnets = ["10.0.1.0/24"]
-  public_subnets  = ["10.0.101.0/24"]
-
-  enable_nat_gateway = true
-  enable_vpn_gateway = true
-}
-
-resource "aws_ecr_repository" "dotnet_sample_repo" {
-  name                 = "dotnet-sample"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-}
-
 resource "aws_iam_role" "app_runner_build_role" {
   name = "apprunner-build-role"
 
@@ -63,7 +40,7 @@ resource "aws_iam_role_policy" "test_policy" {
 
 resource "aws_security_group" "app_sg" {
   name_prefix = "application_sg"
-    vpc_id = module.vpc.vpc_id
+  vpc_id = var.vpc_id
   ingress {
     from_port   = 0
     to_port     = 0
@@ -81,7 +58,7 @@ resource "aws_security_group" "app_sg" {
 
 resource "aws_apprunner_vpc_connector" "connector" {
   vpc_connector_name = "vpc-connector"
-  subnets            = module.vpc.public_subnets
+  subnets            = var.public_subnets
   security_groups    = [aws_security_group.app_sg.id]
 }
 
@@ -93,7 +70,7 @@ resource "aws_apprunner_service" "dotnet_apprunner" {
       image_configuration {
         port = "8080"
       }
-      image_identifier      = "${aws_ecr_repository.dotnet_sample_repo.repository_url}:${var.image_tag}"
+      image_identifier      = "${var.ecr_repository_url}:${var.image_tag}"
       image_repository_type = "ECR"
     }
     auto_deployments_enabled = false
@@ -121,8 +98,4 @@ resource "aws_apprunner_service" "dotnet_apprunner" {
   instance_configuration {
     cpu = "1024"
   }
-}
-
-output "ecr_repo_url" {
-  value = aws_ecr_repository.dotnet_sample_repo.repository_url
 }
