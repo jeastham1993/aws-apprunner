@@ -10,7 +10,7 @@ namespace ApprunnerTesting
         {
             var networkStack = new NetworkStack(this, "NetworkStack");
 
-            var applicationStack = new ApplicationStackWithBuildFromCode(this, "AppStack", new ApplicationStackProps(networkStack.Vpc, networkStack.ApplicationSecurityGroup));
+            var applicationStack = new ApplicationStack(this, "AppStack", new ApplicationStackProps(networkStack.Vpc, networkStack.ApplicationSecurityGroup));
         }
     }
 }

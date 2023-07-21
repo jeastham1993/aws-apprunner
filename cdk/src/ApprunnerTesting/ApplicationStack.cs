@@ -38,6 +38,7 @@ public class ApplicationStack : Construct
         {
             SubnetType = SubnetType.PUBLIC
         });
+
         
         var appRunnerService = new Service(this, "EcrApplicationService", new ServiceProps
         {
@@ -48,7 +49,7 @@ public class ApplicationStack : Construct
                 {
                     Port = 8080
                 },
-                TagOrDigest = "0.0.3",
+                TagOrDigest = "0.0.5",
             }),
             AutoDeploymentsEnabled = false,
             InstanceRole = applicationRole,
